@@ -3,56 +3,62 @@ package errgo
 import "errors"
 
 type ErrGo interface {
+	Error() error
 	GetError() error
 	GetCode() string
 	GetMessage() string
-	GetHttpStatus() int
+	GetStatus() int
 }
 
 type errgo struct {
-	Code       string `json:"code"`
-	Message    string `json:"message"`
-	HttpStatus int    `json:"http_status"`
-	Error      error  `json:"error"`
+	code    string
+	message string
+	status  int
+	error   error
 }
 
 // New generates new errgo that implements ErrGo.
 func New(code, message string) ErrGo {
 	return &errgo{
-		Code:    code,
-		Message: message,
-		Error:   generateError(code, message, "||"),
+		code:    code,
+		message: message,
+		error:   generateError(code, message, "||"),
 	}
 }
 
-// NewWithHttpStatus generates new errgo with http status that implements ErrGo.
-func NewWithHttpStatus(code, message string, httpStatus int) ErrGo {
+// NewWithStatus generates new errgo with status that implements ErrGo.
+func NewWithStatus(code, message string, status int) ErrGo {
 	return &errgo{
-		Code:       code,
-		Message:    message,
-		HttpStatus: httpStatus,
-		Error:      generateError(code, message, "||"),
+		code:    code,
+		message: message,
+		status:  status,
+		error:   generateError(code, message, "||"),
 	}
+}
+
+// Error gets errgo error.
+func (e *errgo) Error() error {
+	return e.error
 }
 
 // GetError gets errgo error.
 func (e *errgo) GetError() error {
-	return e.Error
+	return e.error
 }
 
 // GetCode gets errgo code.
 func (e *errgo) GetCode() string {
-	return e.Code
+	return e.code
 }
 
 // GetMessage gets errgo message.
 func (e *errgo) GetMessage() string {
-	return e.Message
+	return e.message
 }
 
-// GetHttpStatus gets errgo http status.
-func (e *errgo) GetHttpStatus() int {
-	return e.HttpStatus
+// GetStatus gets errgo status.
+func (e *errgo) GetStatus() int {
+	return e.status
 }
 
 // generateError generates new error.

@@ -5,7 +5,7 @@
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/dalikewara/errgo)
 ![GitHub license](https://img.shields.io/github/license/dalikewara/errgo)
 
-**errgo** generates a custom interface for error `errgo.ErrGo` with `code` and `message` as a standard.
+**errgo** provides custom interface for error `errgo.ErrGo` with `code` and `message` as a standard.
 
 ## Getting started
 
@@ -21,10 +21,11 @@ go get github.com/dalikewara/errgo
 
 ```go
 type ErrGo interface {
+    Error() error
     GetError() error
     GetCode() string
     GetMessage() string
-    GetHttpStatus() int
+    GetStatus() int
 }
 ```
 
@@ -38,14 +39,14 @@ fmt.Println(err.GetMessage()) // data not found
 fmt.Println(err.GetError().Error()) // 01||data not found
 ```
 
-#### Generate new error with http status
+#### Generate new error with status
 
 ```go
-err := errgo.NewWithHttpStatus("01", "data not found", 200)
+err := errgo.NewWithStatus("01", "data not found", 200)
 
 fmt.Println(err.GetCode()) // 01
 fmt.Println(err.GetMessage()) // data not found
-fmt.Println(err.GetHttpStatus()) // 200
+fmt.Println(err.GetStatus()) // 200
 fmt.Println(err.GetError().Error()) // 01||data not found
 ```
 

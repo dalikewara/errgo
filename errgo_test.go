@@ -13,9 +13,9 @@ func TestNew(t *testing.T) {
 	assert.Implements(t, (*errgo.ErrGo)(nil), err)
 }
 
-// TestNewWithHttpStatus test NewWithHttpStatus function.
-func TestNewWithHttpStatus(t *testing.T) {
-	err := errgo.NewWithHttpStatus("01", "data not found", 200)
+// TestNewWithStatus test NewWithStatus function.
+func TestNewWithStatus(t *testing.T) {
+	err := errgo.NewWithStatus("01", "data not found", 200)
 	assert.NotNil(t, err)
 	assert.Implements(t, (*errgo.ErrGo)(nil), err)
 }
@@ -34,17 +34,17 @@ func TestErrgo_GetMessage(t *testing.T) {
 	assert.Equal(t, "data not found", err.GetMessage())
 }
 
-// TestErrgo_GetHttpStatus test errgo.GetHttpStatus method.
-func TestErrgo_GetHttpStatus(t *testing.T) {
+// TestErrgo_GetStatus test errgo.GetStatus method.
+func TestErrgo_GetStatus(t *testing.T) {
 	t.Run("http status 0", func(t *testing.T) {
 		err := errgo.New("01", "data not found")
 		assert.NotNil(t, err)
-		assert.Equal(t, 0, err.GetHttpStatus())
+		assert.Equal(t, 0, err.GetStatus())
 	})
 	t.Run("OK", func(t *testing.T) {
-		err := errgo.NewWithHttpStatus("01", "data not found", 200)
+		err := errgo.NewWithStatus("01", "data not found", 200)
 		assert.NotNil(t, err)
-		assert.Equal(t, 200, err.GetHttpStatus())
+		assert.Equal(t, 200, err.GetStatus())
 		assert.Equal(t, "data not found", err.GetMessage())
 		assert.Equal(t, "01", err.GetCode())
 		assert.EqualError(t, err.GetError(), "01||data not found")
